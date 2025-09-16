@@ -234,6 +234,56 @@ class S {
     return Intl.message('界面', name: 'uiSettings', desc: '', args: []);
   }
 
+  /// `BETA: 使用新的原生UI替代网页UI`
+  String get betaUseNativeUI {
+    return Intl.message(
+      'BETA: 使用新的原生UI替代网页UI',
+      name: 'betaUseNativeUI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `使用Flutter原生UI进行文件浏览，替代WebView。需要重启应用。`
+  String get betaUseNativeUIDesc {
+    return Intl.message(
+      '使用Flutter原生UI进行文件浏览，替代WebView。需要重启应用。',
+      name: 'betaUseNativeUIDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `立即重启`
+  String get restartAppNow {
+    return Intl.message('立即重启', name: 'restartAppNow', desc: '', args: []);
+  }
+
+  /// `稍后重启`
+  String get restartAppLater {
+    return Intl.message('稍后重启', name: 'restartAppLater', desc: '', args: []);
+  }
+
+  /// `查看`
+  String get viewPage {
+    return Intl.message('查看', name: 'viewPage', desc: '', args: []);
+  }
+
+  /// `Powered By OpenList-Mobile`
+  String get poweredByOpenListMobile {
+    return Intl.message(
+      'Powered By OpenList-Mobile',
+      name: 'poweredByOpenListMobile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `没有文件`
+  String get noFiles {
+    return Intl.message('没有文件', name: 'noFiles', desc: '', args: []);
+  }
+
   /// `申请【所有文件访问权限】`
   String get grantManagerStoragePermission {
     return Intl.message(

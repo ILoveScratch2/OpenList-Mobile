@@ -110,6 +110,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "autoStartWebPage": MessageLookupByLibrary.simpleMessage("将网页设置为打开首页"),
     "autoStartWebPageDesc": MessageLookupByLibrary.simpleMessage("打开主界面时的首页"),
+    "betaUseNativeUI": MessageLookupByLibrary.simpleMessage(
+      "BETA: 使用新的原生UI替代网页UI",
+    ),
+    "betaUseNativeUIDesc": MessageLookupByLibrary.simpleMessage(
+      "使用Flutter原生UI进行文件浏览，替代WebView。需要重启应用。",
+    ),
     "bootAutoStartService": MessageLookupByLibrary.simpleMessage("开机自启动服务"),
     "bootAutoStartServiceDesc": MessageLookupByLibrary.simpleMessage(
       "在开机后自动启动OpenList服务。（请确保授予自启动权限）",
@@ -263,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noActiveDownloads": MessageLookupByLibrary.simpleMessage("暂无进行中的下载"),
     "noAppToOpenFile": MessageLookupByLibrary.simpleMessage("没有找到可以打开此文件的应用"),
     "noCompletedDownloads": MessageLookupByLibrary.simpleMessage("暂无已完成的下载"),
+    "noFiles": MessageLookupByLibrary.simpleMessage("没有文件"),
     "noPermissionToInstallApk": MessageLookupByLibrary.simpleMessage(
       "没有权限安装 APK 文件，请在设置中开启安装权限",
     ),
@@ -289,10 +296,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "openListDownloadDirectory": m32,
     "parseFilenameFailed": m33,
     "pending": MessageLookupByLibrary.simpleMessage("等待中"),
+    "poweredByOpenListMobile": MessageLookupByLibrary.simpleMessage(
+      "Powered By OpenList-Mobile",
+    ),
     "preparingDownload": MessageLookupByLibrary.simpleMessage("准备下载..."),
     "preparingDownloadStatus": MessageLookupByLibrary.simpleMessage("准备下载..."),
     "refresh": MessageLookupByLibrary.simpleMessage("刷新"),
     "releasePage": MessageLookupByLibrary.simpleMessage("发布页面"),
+    "restartAppLater": MessageLookupByLibrary.simpleMessage("稍后重启"),
+    "restartAppNow": MessageLookupByLibrary.simpleMessage("立即重启"),
     "selectAppToOpen": MessageLookupByLibrary.simpleMessage("选择应用打开"),
     "setAdminPassword": MessageLookupByLibrary.simpleMessage("设置admin密码"),
     "setDefaultDirectory": MessageLookupByLibrary.simpleMessage("是否设为初始目录？"),
@@ -320,6 +332,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "viewDownloads": MessageLookupByLibrary.simpleMessage("查看下载"),
     "viewLocation": MessageLookupByLibrary.simpleMessage("查看位置"),
+    "viewPage": MessageLookupByLibrary.simpleMessage("查看"),
     "wakeLock": MessageLookupByLibrary.simpleMessage("唤醒锁"),
     "wakeLockDesc": MessageLookupByLibrary.simpleMessage(
       "开启防止锁屏后CPU休眠，保持进程在后台运行。（部分系统可能导致杀后台）",

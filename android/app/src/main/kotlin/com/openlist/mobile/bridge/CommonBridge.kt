@@ -39,4 +39,11 @@ class CommonBridge(private val context: Context) : GeneratedApi.NativeCommon {
     override fun longToast(msg: String) {
         context.longToast(msg)
     }
+
+    override fun restartApp() {
+        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        System.exit(0)
+    }
 }

@@ -9,6 +9,8 @@ object AppConfig {
 
     var isSilentJumpAppEnabled by prefs.dynamic("isSilentJumpAppEnabled", fallback = false)
 
+    var isUseNativeUIEnabled by prefs.dynamic("isUseNativeUIEnabled", fallback = false)
+
     var isWakeLockEnabled: Boolean by prefs.dynamic("isWakeLockEnabled", fallback = false)
     var isStartAtBootEnabled: Boolean by prefs.dynamic("isStartAtBootEnabled", fallback = false)
     var isAutoCheckUpdateEnabled: Boolean by prefs.dynamic(
@@ -18,6 +20,11 @@ object AppConfig {
 
     var isAutoOpenWebPageEnabled: Boolean by prefs.dynamic(
         "isAutoOpenWebPageEnabled",
+        fallback = false
+    )
+
+    var isUseNativeUIEnabled: Boolean by prefs.dynamic(
+        "isUseNativeUIEnabled",
         fallback = false
     )
 

@@ -124,6 +124,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoStartWebPageDesc": MessageLookupByLibrary.simpleMessage(
       "Default page when opening main interface",
     ),
+    "betaUseNativeUI": MessageLookupByLibrary.simpleMessage(
+      "BETA: Use new native UI instead of Web UI",
+    ),
+    "betaUseNativeUIDesc": MessageLookupByLibrary.simpleMessage(
+      "Use Flutter native UI for file browsing instead of WebView. Requires app restart.",
+    ),
     "bootAutoStartService": MessageLookupByLibrary.simpleMessage(
       "Boot auto-start service",
     ),
@@ -337,6 +343,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noCompletedDownloads": MessageLookupByLibrary.simpleMessage(
       "No completed downloads",
     ),
+    "noFiles": MessageLookupByLibrary.simpleMessage("No files"),
     "noPermissionToInstallApk": MessageLookupByLibrary.simpleMessage(
       "No permission to install APK file, please enable install permission in settings",
     ),
@@ -369,6 +376,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "openListDownloadDirectory": m32,
     "parseFilenameFailed": m33,
     "pending": MessageLookupByLibrary.simpleMessage("Pending"),
+    "poweredByOpenListMobile": MessageLookupByLibrary.simpleMessage(
+      "Powered By OpenList-Mobile",
+    ),
     "preparingDownload": MessageLookupByLibrary.simpleMessage(
       "Preparing download...",
     ),
@@ -377,6 +387,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
     "releasePage": MessageLookupByLibrary.simpleMessage("Release Page"),
+    "restartAppLater": MessageLookupByLibrary.simpleMessage("Restart Later"),
+    "restartAppNow": MessageLookupByLibrary.simpleMessage("Restart App Now"),
     "selectAppToOpen": MessageLookupByLibrary.simpleMessage(
       "Select app to open",
     ),
@@ -416,6 +428,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "viewDownloads": MessageLookupByLibrary.simpleMessage("View Downloads"),
     "viewLocation": MessageLookupByLibrary.simpleMessage("View Location"),
+    "viewPage": MessageLookupByLibrary.simpleMessage("View"),
     "wakeLock": MessageLookupByLibrary.simpleMessage("Wake lock"),
     "wakeLockDesc": MessageLookupByLibrary.simpleMessage(
       "Prevent CPU from sleeping when screen is off. (May cause app killed in background on some devices)",

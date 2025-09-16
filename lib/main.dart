@@ -4,6 +4,7 @@ import 'package:openlist_mobile/pages/app_update_dialog.dart';
 import 'package:openlist_mobile/pages/settings/settings.dart';
 import 'package:openlist_mobile/pages/web/web.dart';
 import 'package:openlist_mobile/pages/download_manager_page.dart';
+import 'package:openlist_mobile/pages/native_file_explorer/native_file_explorer.dart';
 import 'package:openlist_mobile/utils/download_manager.dart';
 import 'package:openlist_mobile/utils/notification_manager.dart';
 import 'package:openlist_mobile/utils/service_manager.dart';
@@ -100,7 +101,9 @@ class MyHomePage extends StatelessWidget {
             lazy: true,
             index: controller.selectedIndex.value,
             children: [
-              WebScreen(key: webGlobalKey),
+              controller._useNativeUI.value 
+                ? const NativeFileExplorerScreen() 
+                : WebScreen(key: webGlobalKey),
               const OpenListScreen(),
               const DownloadManagerPage(),
               const SettingsScreen()
@@ -111,7 +114,7 @@ class MyHomePage extends StatelessWidget {
                 destinations: [
                   NavigationDestination(
                     icon: const Icon(Icons.preview),
-                    label: S.current.webPage,
+                    label: controller._useNativeUI.value ? S.current.viewPage : S.current.webPage,
                   ),
                   NavigationDestination(
                     icon: SvgPicture.asset(
@@ -155,6 +158,7 @@ class MyHomePage extends StatelessWidget {
 
 class _MainController extends GetxController {
   final selectedIndex = 1.obs;
+  final _useNativeUI = false.obs;
 
   setPageIndex(int index) {
     selectedIndex.value = index;
@@ -162,6 +166,8 @@ class _MainController extends GetxController {
 
   @override
   void onInit() async {
+    _useNativeUI.value = await NativeBridge.appConfig.isUseNativeUIEnabled();
+    
     final webPage = await NativeBridge.appConfig.isAutoOpenWebPageEnabled();
     if (webPage) {
       setPageIndex(MyHomePage.webPageIndex);

@@ -23,6 +23,12 @@ object AppConfigBridge : GeneratedApi.AppConfig {
         AppConfig.isSilentJumpAppEnabled = enabled
     }
 
+    override fun isUseNativeUIEnabled(): Boolean = AppConfig.isUseNativeUIEnabled
+
+    override fun setUseNativeUIEnabled(enabled: Boolean) {
+        AppConfig.isUseNativeUIEnabled = enabled
+    }
+
     override fun setAutoOpenWebPageEnabled(enabled: Boolean) {
         AppConfig.isAutoOpenWebPageEnabled = enabled
     }

@@ -1,5 +1,10 @@
 import 'package:pigeon/pigeon.dart';
 
+@ConfigurePigeon(PigeonOptions(
+  dartOut: 'lib/generated_api.dart',
+  kotlinOut: 'android/app/src/main/kotlin/com/openlist/pigeon/GeneratedApi.kt',
+  kotlinOptions: KotlinOptions(package: 'com.openlist.pigeon'),
+))
 @HostApi()
 abstract class AppConfig {
   bool isWakeLockEnabled();
@@ -25,6 +30,10 @@ abstract class AppConfig {
   bool isSilentJumpAppEnabled();
 
   void setSilentJumpAppEnabled(bool enabled);
+
+  bool isUseNativeUIEnabled();
+
+  void setUseNativeUIEnabled(bool enabled);
 }
 
 @HostApi()
@@ -42,6 +51,8 @@ abstract class NativeCommon {
   void toast(String msg);
 
   void longToast(String msg);
+
+  void restartApp();
 }
 
 @HostApi()

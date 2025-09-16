@@ -157,6 +157,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           DividerPreference(title: S.of(context).uiSettings),
           SwitchPreference(
+              icon: const Icon(Icons.web),
+              title: S.of(context).betaUseNativeUI,
+              subtitle: S.of(context).betaUseNativeUIDesc,
+              value: controller._useNativeUI.value,
+              onChanged: (value) {
+                controller.useNativeUI = value;
+              }),
+          SwitchPreference(
               icon: const Icon(Icons.pan_tool_alt_outlined),
               title: S.of(context).silentJumpApp,
               subtitle: S.of(context).silentJumpAppDesc,
@@ -270,6 +278,41 @@ class _SettingsController extends GetxController {
         NativeBridge.appConfig.setSilentJumpAppEnabled(value)
       };
 
+  final _useNativeUI = false.obs;
+
+  get useNativeUI => _useNativeUI.value;
+
+  set useNativeUI(value) {
+    _useNativeUI.value = value;
+    NativeBridge.appConfig.setUseNativeUIEnabled(value);
+    if (value) {
+      _showRestartDialog();
+    }
+  }
+
+  void _showRestartDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: Text(S.current.betaUseNativeUI),
+        content: Text(S.current.betaUseNativeUIDesc),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(S.current.restartAppLater),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              NativeBridge.common.restartApp();
+            },
+            child: Text(S.current.restartAppNow),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
   @override
   void onInit() async {
     updateData();
@@ -284,6 +327,7 @@ class _SettingsController extends GetxController {
     cfg.isStartAtBootEnabled().then((value) => startAtBoot = value);
     cfg.isAutoOpenWebPageEnabled().then((value) => autoStartWebPage = value);
     cfg.isSilentJumpAppEnabled().then((value) => silentJumpApp = value);
+    cfg.isUseNativeUIEnabled().then((value) => _useNativeUI.value = value);
 
     _dataDir.value = await cfg.getDataDir();
 
