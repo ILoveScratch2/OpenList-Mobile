@@ -1,0 +1,182 @@
+name: Build TEST
+
+on:
+  push:
+    branches:
+      - "main"
+    paths-ignore:
+      - "*.md"
+      - "*.sh"
+      - "release.yaml"
+  #      - "sync_frp.yaml"
+  pull_request:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      output: "${{ github.workspace }}/build/app/outputs/apk/release"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Download OpenList Source Code
+        run: |
+          cd $GITHUB_WORKSPACE/openlist-lib/scripts
+          chmod +x *.sh
+          ./init_openlist.sh
+          ./init_web.sh
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.4
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r25c
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2.4.2
+
+      - name: Build OpenList
+        run: |
+          cd $GITHUB_WORKSPACE/openlist-lib/scripts
+          chmod +x *.sh
+          ./init_gomobile.sh
+          ./gobind.sh
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+
+      - name: Upload AAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList"
+          path: "${{ github.workspace }}/android/app/libs/*.aar"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.7'
+      - run: flutter build apk --split-per-abi --release
+
+      - name: Upload missing_rules.txt
+        if: failure() && steps.gradle.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: "missing_rules"
+          path: "${{ github.workspace }}/build/app/outputs/mapping/release/missing_rules.txt"
+
+      - name: Init APP Version Name
+        run: |
+          echo "ver_name=$(grep -m 1 'versionName' ${{ env.output }}/output-metadata.json | cut -d'"' -f4)" >> $GITHUB_ENV
+      - name: Upload App To Artifact arm64-v8a
+        if: success () || failure ()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList-Mobile-v${{ env.ver_name }}_arm64-v8a"
+          path: "${{ env.output }}/*-v8a.apk"
+
+      - name: Upload App To Artifact arm-v7a
+        if: success () || failure ()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList-Mobile-v${{ env.ver_name }}_arm-v7a"
+          path: "${{ env.output }}/*-v7a.apk"
+
+      - name: Upload App To Artifact x86
+        if: success () || failure ()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList-Mobile-v${{ env.ver_name }}_x86_64"
+          path: "${{ env.output }}/*64.apk"
+
+  ios:
+    runs-on: macos-latest
+    env:
+      output: "${{ github.workspace }}/build/ios/ipa"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.4
+
+      - name: Download OpenList Source Code
+        run: |
+          cd $GITHUB_WORKSPACE/openlist-lib/scripts
+          chmod +x *.sh
+          echo "Initializing OpenList..."
+          ./init_openlist.sh
+          echo "Initializing Web assets for iOS..."
+          ./init_web_ios.sh
+      - name: Verify Go Installation
+        run: |
+          which go
+          go version
+          echo "GOPATH: $GOPATH"
+          echo "GOROOT: $GOROOT"
+      - name: Build OpenList for iOS
+        run: |
+          cd $GITHUB_WORKSPACE/openlist-lib/scripts
+          chmod +x *.sh
+          echo "Initializing gomobile for iOS..."
+          ./init_gomobile.sh
+          echo "Checking Go mobile installation..."
+          go list -m golang.org/x/mobile 2>/dev/null || echo "mobile module not found"
+          which gomobile || echo "gomobile not in PATH"
+          which gobind || echo "gobind not in PATH"
+          echo "Checking openlistlib directory..."
+          ls -la ../openlistlib/ || echo "openlistlib directory not found"
+          echo "Checking for problematic imports..."
+          if [ -d ../openlistlib ]; then
+            echo "Go files in openlistlib:"
+            ls -la ../openlistlib/*.go 2>/dev/null || echo "No Go files found"
+            echo "Checking imports:"
+            grep -r "golang.org/x/mobile/bind" ../openlistlib/ 2>/dev/null || echo "No bind imports found"
+          fi
+          echo "Building iOS framework..."
+          ./gobind_ios.sh
+      - name: Upload iOS Framework
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList-iOS"
+          path: "${{ github.workspace }}/ios/Frameworks/*.xcframework"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.7'
+
+      - name: Build iOS App
+        run: |
+          flutter build ios --release --no-codesign
+      - name: Create IPA
+        run: |
+          mkdir -p ${{ env.output }}
+          cd build/ios/iphoneos
+          mkdir Payload
+          cp -r Runner.app Payload/
+          zip -r ${{ env.output }}/OpenList-Mobile.ipa Payload/
+      - name: Get App Version
+        run: |
+          # Get base version from openlist_version file and add timestamp
+          BASE_VERSION=$(cat openlist_version)
+          # Generate timestamp in format YYMMDDHH (精确到小时)
+          TIMESTAMP=$(date +%y%m%d%H)
+          # Combine version with timestamp for artifact naming
+          echo "ver_name=${BASE_VERSION}.${TIMESTAMP}" >> $GITHUB_ENV
+      - name: Upload iOS App To Artifact
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "OpenList-Mobile-iOS-${{ env.ver_name }}"
+          path: "${{ env.output }}/OpenList-Mobile.ipa"
