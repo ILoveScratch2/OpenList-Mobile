@@ -57,6 +57,6 @@ jobs:
       - name: Run workflow release
         if: env.openlist_update == 1 && ( success() || failure() )
         run: |
-          gh workflow run release.yaml -R OpenListTeam/OpenList-Mobile
+          gh workflow run release.yaml -R ILoveScratch2/OpenList-Mobile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
